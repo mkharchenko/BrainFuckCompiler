@@ -1,68 +1,56 @@
 #include "Commands.h"
-
-LoopCommandBase::LoopCommandBase(int loopsize) {
-    this->loopsize_ = loopsize;
-}
-
-LoopEndCommand::LoopEndCommand(int loopsize) : LoopCommandBase(loopsize) {}
-
-LoopStartCommand::LoopStartCommand(int loopsize) : LoopCommandBase(loopsize) {}
+#include <string>
 
 // DecrementValueCommand
-CommandOutput DecrementValueCommand::Execute(BFProgramState& state) {
-    (*state.currentData)--;
+CommandOutput DecrementValueCommand::Execute(std::shared_ptr<BFProgramState> state) {
+    (*state->currentData)--;
     return CommandOutput();
 }
 
 // IncrementValueCommand
-CommandOutput IncrementValueCommand::Execute(BFProgramState& state) {
-    (*state.currentData)++;
+CommandOutput IncrementValueCommand::Execute(std::shared_ptr<BFProgramState> state) {
+   (*state->currentData)++;
     return CommandOutput();
 }
 
-// LoopEndCommand
-CommandOutput LoopEndCommand::Execute(BFProgramState& state) {
-    if (state.GetPointerValue()) {
-        return CommandOutput(this->loopsize_ * -1);
-    }
-    else {
-        return CommandOutput();
-    }
-}
-
-// LoopStartCommand
-CommandOutput LoopStartCommand::Execute(BFProgramState& state) {
-    if (state.GetPointerValue()) {
-        return CommandOutput();
-    }
-    else {
-        return CommandOutput(this->loopsize_);
-    }
-}
-
 // PrintValueCommand
-CommandOutput PrintValueCommand::Execute(BFProgramState& state) {
-    return CommandOutput(1, true, state.GetPointerValue());
+CommandOutput PrintValueCommand::Execute(std::shared_ptr<BFProgramState> state) {
+    std::string res = "";
+    res.push_back(state->GetPointerValue());
+    return res;
 }
 
 // StepBackwardCommand
-CommandOutput StepBackwardCommand::Execute(BFProgramState& state) {
-    if (state.currentData == state.data.begin()) {
+CommandOutput StepBackwardCommand::Execute(std::shared_ptr<BFProgramState> state) {
+    if (state->currentData == state->data.begin()) {
         throw std::runtime_error("Runtime error. Selected cell number less than 0.");
     }
-    state.currentData--;
+    state->currentData--;
     return CommandOutput();
 }
 
 // StepForwardCommand
-CommandOutput StepForwardCommand::Execute(BFProgramState& state) {
-    if (state.currentData == --(state.data.end())) {
-        state.data.push_back(0);
+CommandOutput StepForwardCommand::Execute(std::shared_ptr<BFProgramState> state) {
+    if (state->currentData == --(state->data.end())) {
+        state->data.push_back(0);
     }
-    state.currentData++;
+    state->currentData++;
     return CommandOutput();
 }
 
+
+CommandOutput LoopCommand::Execute(std::shared_ptr<BFProgramState> state) {
+    Invoker inv(commandList_);
+    std::string res = "";
+    while (state->GetPointerValue()) {
+        res += inv.ExecuteCommands(state);
+    }
+    return res;
+}
+
+LoopCommand::LoopCommand(std::shared_ptr<std::list<std::shared_ptr<ICommand>>> commandList) {
+    commandList_ = commandList;
+}
 
 
 ICommand::~ICommand() {}

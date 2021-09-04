@@ -3,6 +3,7 @@
 #include "BFProgramState.h"
 #include "Invoker.h"
 #include "CommandOutput.h"
+#include <list>
 
 class Invoker;
 
@@ -10,59 +11,46 @@ class Invoker;
 Each command has execute and undo methods */
 class ICommand {
 public:
-    virtual CommandOutput Execute(BFProgramState& state) = 0;
+    virtual CommandOutput Execute(std::shared_ptr<BFProgramState> state) = 0;
     virtual ~ICommand() = 0;
-};
-
-class LoopCommandBase : public ICommand {
-protected:
-    int loopsize_;
-public:
-    LoopCommandBase(int loopsize);
 };
 
 // > command
 class StepForwardCommand : public ICommand {
 public:
-    virtual CommandOutput Execute(BFProgramState& state);
+    virtual CommandOutput Execute(std::shared_ptr<BFProgramState> state);
 };
 
 // < command
 class StepBackwardCommand : public ICommand {
 public:
-    virtual CommandOutput Execute(BFProgramState& state);
+    virtual CommandOutput Execute(std::shared_ptr<BFProgramState> state);
 };
 
 // . command
 class PrintValueCommand : public ICommand {
 public:
-    virtual CommandOutput Execute(BFProgramState& state);
-};
-
-// [ command
-class LoopStartCommand : public LoopCommandBase {
-public:
-    virtual CommandOutput Execute(BFProgramState& state);
-    LoopStartCommand(int loopsize);
-};
-
-// ] command
-class LoopEndCommand : public LoopCommandBase {
-public:
-    virtual CommandOutput Execute(BFProgramState& state);
-    LoopEndCommand(int loopsize);
+    virtual CommandOutput Execute(std::shared_ptr<BFProgramState> state);
 };
 
 // + command
 class IncrementValueCommand : public ICommand {
 public:
-    virtual CommandOutput Execute(BFProgramState& state);
+    virtual CommandOutput Execute(std::shared_ptr<BFProgramState> state);
 };
 
 // - command
 class DecrementValueCommand : public ICommand {
 public:
-    virtual CommandOutput Execute(BFProgramState& state);
+    virtual CommandOutput Execute(std::shared_ptr<BFProgramState> state);
+};
+
+class LoopCommand : public ICommand {
+private:
+    std::shared_ptr<std::list<std::shared_ptr<ICommand>>> commandList_;
+public:
+    LoopCommand(std::shared_ptr<std::list<std::shared_ptr<ICommand>>> commandList);
+    virtual CommandOutput Execute(std::shared_ptr<BFProgramState> state);
 };
 
 #endif

@@ -1,7 +1,7 @@
 #ifndef COMPILER_H
 #define COMPILER_H
 #include <string>
-#include <vector>
+#include <list>
 #include <memory>
 #include "Commands.h"
 
@@ -15,7 +15,7 @@ private:
 public:
 	Compiler(std::string code);
 	// Compiles program code to a list of commands and returns it
-	std::shared_ptr<std::vector<std::shared_ptr<ICommand>>> Compile();
+	std::shared_ptr<std::list<std::shared_ptr<ICommand>>> Compile();
 	// Sets code string
 	void SetCodeString(std::string code);
 };

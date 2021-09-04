@@ -1,11 +1,11 @@
 #include "Invoker.h"
 #include <string>
 
-void Invoker::SetCommandList(std::shared_ptr<std::vector<std::shared_ptr<ICommand>>> commandList) {
+void Invoker::SetCommandList(std::shared_ptr<std::list<std::shared_ptr<ICommand>>> commandList) {
 	this->commandList_ = commandList;
 }
 
-Invoker::Invoker(std::shared_ptr<std::vector<std::shared_ptr<ICommand>>> commandList) {
+Invoker::Invoker(std::shared_ptr<std::list<std::shared_ptr<ICommand>>> commandList) {
 	SetCommandList(commandList);
 }
 
@@ -13,16 +13,21 @@ void Invoker::Init() {
 	programstate_.reset(new BFProgramState);
 }
 
+std::string Invoker::RunProgram() {
+	std::string result = "";
+	for (auto it = (*commandList_).begin(); it != (*commandList_).end(); it++) {
+		CommandOutput co = (*it)->Execute(programstate_);
+		result += co.returned_result;
+	}
+	return result;
+}
+
 std::string Invoker::ExecuteCommands() {
 	Init();
-	std::string result = "";
-	for (int i = 0; i < commandList_->size() && i >= 0;) {
-		CommandOutput co = (*commandList_)[i]->Execute(*programstate_);
-		i += co.step;
-		if (co.anyReturns) {
-			result.push_back(co.returned_char);
-		}
-	}
-	programstate_.reset();
-	return result;
+	return RunProgram();
+}
+
+std::string Invoker::ExecuteCommands(std::shared_ptr<BFProgramState> programstate) {
+	programstate_ = programstate;
+	return RunProgram();
 }

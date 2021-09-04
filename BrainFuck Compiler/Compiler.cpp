@@ -1,5 +1,6 @@
 #include "Compiler.h"
 #include <stack>
+#include <list>
 
 void Compiler::SetCodeString(std::string code) {
 	this->code_ = code;
@@ -27,47 +28,47 @@ bool Compiler::CheckCorrectBrackets() {
 	return stack.empty();
 }
 
-std::shared_ptr<std::vector<std::shared_ptr<ICommand>>> Compiler::Compile() {
-	std::shared_ptr<std::vector<std::shared_ptr<ICommand>>> commandList_(new std::vector<std::shared_ptr<ICommand>>);
+std::shared_ptr<std::list<std::shared_ptr<ICommand>>> Compiler::Compile() {
+	std::shared_ptr<std::list<std::shared_ptr<ICommand>>> commandList_(new std::list<std::shared_ptr<ICommand>>);
 	if (code_.empty()) {
 		throw std::invalid_argument("Compilation error. No code entered.");
 	}
 	if (!CheckCorrectBrackets()) {
 		throw std::invalid_argument("Compilation error. Loop brackets syntax violated.");
 	}
-	commandList_->resize(code_.length());
 	const int code_length = code_.length();
 	for (int i = 0; i < code_length; ++i) {
 		switch (code_[i]) {
 			case '>': {
 				std::shared_ptr<ICommand> cmd(new StepForwardCommand());
-				(*commandList_)[i] = cmd;
+				(*commandList_).push_back(cmd);
 				break;
 			}
 			case '<': {
 				std::shared_ptr<ICommand> cmd(new StepBackwardCommand());
-				(*commandList_)[i] = cmd;
+				(*commandList_).push_back(cmd);
 				break;
 			}
 			case '+': {
 				std::shared_ptr<ICommand> cmd(new IncrementValueCommand());
-				(*commandList_)[i] = cmd;
+				(*commandList_).push_back(cmd);
 				break;
 			}
 			case '-': {
 				std::shared_ptr<ICommand> cmd(new DecrementValueCommand());
-				(*commandList_)[i] = cmd;
+				(*commandList_).push_back(cmd);
 				break;
 			}
 			case '.': {
 				std::shared_ptr<ICommand> cmd(new PrintValueCommand());
-				(*commandList_)[i] = cmd;
+				(*commandList_).push_back(cmd);
 				break;
 			}
 			case '[': {
-				int loopsize = 1;
-				for (int j = i + 1, depth = 1; j < code_length && depth > 0; ++j) {
-					switch (code_[j]) {
+				std::string loop_code = "";
+				i++;
+				for (int depth = 1; i < code_length && depth > 0; ++i) {
+					switch (code_[i]) {
 						case '[': {
 							depth++;
 							break;
@@ -77,30 +78,14 @@ std::shared_ptr<std::vector<std::shared_ptr<ICommand>>> Compiler::Compile() {
 							break;
 						}
 					}
-					loopsize++;
-				}
-				std::shared_ptr<ICommand> cmd(new LoopStartCommand(loopsize));
-				(*commandList_)[i] = cmd;
-				break;
-			}
-			case ']': {
-				int loopsize = 0;
-				for (int j = i - 1, depth = 1; j < code_length && depth > 0; --j) {
-					switch (code_[j])
-					{
-						case '[': {
-							depth--;
-							break;
-						}
-						case ']': {
-							depth++;
-							break;
-						}
+					if (depth > 0) {
+						loop_code.push_back(code_[i]);
 					}
-					loopsize++;
 				}
-				std::shared_ptr<ICommand> cmd(new LoopEndCommand(loopsize));
-				(*commandList_)[i] = cmd;
+				i--;
+				Compiler cmp(loop_code);
+				std::shared_ptr<ICommand> cmd(new LoopCommand(cmp.Compile()));
+				(*commandList_).push_back(cmd);
 				break;
 			}
 			default: {

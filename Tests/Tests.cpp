@@ -59,7 +59,7 @@ namespace Tests
 			Compiler cmp("++.>++++>.");
 			int expected = 10;
 			// Act
-			std::shared_ptr<std::vector<std::shared_ptr<ICommand>>> list = cmp.Compile();
+			std::shared_ptr<std::list<std::shared_ptr<ICommand>>> list = cmp.Compile();
 			int actual = list->size();
 			// Assert
 			Assert::AreEqual(expected, actual);
@@ -72,13 +72,13 @@ namespace Tests
 		Increments currentData in BFProgramState*/
 		TEST_METHOD(StepForwardCommandExecute_GiveSimpleProgramState_IncrementsCurrentData) {
 			// Arrange
-			std::unique_ptr<BFProgramState> bfc(new BFProgramState);
+			std::shared_ptr<BFProgramState> bfc(new BFProgramState);
 			StepForwardCommand cmd;
 			bfc->data.push_back(0);
 			std::list<char>::iterator expected = bfc->currentData;
 			expected++;
 			// Act
-			cmd.Execute(*bfc);
+			cmd.Execute(bfc);
 			std::list<char>::iterator actual = bfc->currentData;
 			// Assert
 			Assert::IsTrue(expected == actual);
@@ -87,13 +87,13 @@ namespace Tests
 		Decrements currentData in BFProgramState*/
 		TEST_METHOD(StepBackwardCommandExecute_GiveSimpleProgramState_DecrementsCurrentData) {
 			// Arrange
-			std::unique_ptr<BFProgramState> bfc(new BFProgramState);
+			std::shared_ptr<BFProgramState> bfc(new BFProgramState);
 			StepBackwardCommand cmd;
 			StepForwardCommand cmd2;
-			cmd2.Execute(*bfc);
+			cmd2.Execute(bfc);
 			std::list<char>::iterator expected = bfc->data.begin();
 			// Act
-			cmd.Execute(*bfc);
+			cmd.Execute(bfc);
 			std::list<char>::iterator actual = bfc->currentData;
 			// Assert
 			Assert::IsTrue(expected == actual);
@@ -102,12 +102,12 @@ namespace Tests
 		Increments current value of BFProgramState*/
 		TEST_METHOD(IncrementValueCommandExecute_GiveSimpleProgramState_IncrementsCurrentValue) {
 			// Arrange
-			std::unique_ptr<BFProgramState> bfc(new BFProgramState);
+			std::shared_ptr<BFProgramState> bfc(new BFProgramState);
 			IncrementValueCommand cmd;
 			(*bfc->currentData) = 10;
 			int expected = 11;
 			// Act
-			cmd.Execute(*bfc);
+			cmd.Execute(bfc);
 			int actual = bfc->GetPointerValue();
 			// Assert
 			Assert::AreEqual(expected, actual);
@@ -116,12 +116,12 @@ namespace Tests
 		Decrements current value of BFProgramState*/
 		TEST_METHOD(DecrementValueCommandExecute_GiveSimpleProgramState_DecrementsCurrentValue) {
 			// Arrange
-			std::unique_ptr<BFProgramState> bfc(new BFProgramState);
+			std::shared_ptr<BFProgramState> bfc(new BFProgramState);
 			DecrementValueCommand cmd;
 			(*bfc->currentData) = 10;
 			int expected = 9;
 			// Act
-			cmd.Execute(*bfc);
+			cmd.Execute(bfc);
 			int actual = bfc->GetPointerValue();
 			// Assert
 			Assert::AreEqual(expected, actual);
@@ -130,43 +130,13 @@ namespace Tests
 		Returns CommandOutput with current char*/
 		TEST_METHOD(PrintValueCommandExecute_GiveSimpleProgramState_ReturnsCommandOutputWithChar) {
 			// Arrange
-			std::unique_ptr<BFProgramState> bfc(new BFProgramState);
+			std::shared_ptr<BFProgramState> bfc(new BFProgramState);
 			PrintValueCommand cmd;
-			(*bfc->currentData) = 40;
-			char expected = 40;
+			(*bfc->currentData) = '!';
+			std::string expected = "!";
 			// Act
-			CommandOutput co = cmd.Execute(*bfc);
-			char actual = co.returned_char;
-			// Assert
-			Assert::IsTrue(co.anyReturns);
-			Assert::AreEqual(expected, actual);
-		}
-		/*Testing Execute method of LoopStartCommand
-		Returns CommandOutput with Step equals to loopsize*/
-		TEST_METHOD(LoopStartCommandExecute_GiveEmptyProgramState_ReturnsCommandOutputWithStepEqualsLoopSize) {
-			// Arrange
-			std::unique_ptr<BFProgramState> bfc(new BFProgramState);
-			const int loopsize = 15;
-			LoopStartCommand cmd(loopsize);
-			int expected = loopsize;
-			// Act
-			CommandOutput co = cmd.Execute(*bfc);
-			int actual = co.step;
-			// Assert
-			Assert::AreEqual(expected, actual);
-		}
-		/*Testing Execute method of LoopEndCommand
-		Returns CommandOutput with Step equals to negative loopsize*/
-		TEST_METHOD(LoopEndCommandExecute_GiveNotEmptyProgramState_ReturnsCommandOutPutWithStepEqualsNegativeLoopSize) {
-			// Arrange
-			std::unique_ptr<BFProgramState> bfc(new BFProgramState);
-			(*bfc->currentData) = 20;
-			const int loopsize = 15;
-			LoopEndCommand cmd(loopsize);
-			int expected = loopsize * -1;
-			// Act
-			CommandOutput co = cmd.Execute(*bfc);
-			int actual = co.step;
+			CommandOutput co = cmd.Execute(bfc);
+			std::string actual = co.returned_result;
 			// Assert
 			Assert::AreEqual(expected, actual);
 		}
@@ -175,10 +145,10 @@ namespace Tests
 		Throws runtime_error*/
 		TEST_METHOD(StepBackWardCommandExecute_GiveEmptyProgramState_ThrowsRuntimeError) {
 			// Arrange
-			std::unique_ptr<BFProgramState> bfc(new BFProgramState);
+			std::shared_ptr<BFProgramState> bfc(new BFProgramState);
 			StepBackwardCommand cmd;
 			// Act
-			auto func = [&] { cmd.Execute(*bfc); };
+			auto func = [&] { cmd.Execute(bfc); };
 			// Assert
 			Assert::ExpectException<std::runtime_error>(func);
 		}

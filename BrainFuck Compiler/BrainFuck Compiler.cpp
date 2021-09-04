@@ -10,7 +10,7 @@ int main()
 	std::cin >> code;
 	Compiler cmp(code);
 	std::string result;
-	std::shared_ptr<std::vector<std::shared_ptr<ICommand>>> commandList;
+	std::shared_ptr<std::list<std::shared_ptr<ICommand>>> commandList;
 	try {
 		commandList = cmp.Compile(); // step 1 - compile
 		Invoker inv(commandList);
