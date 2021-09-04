@@ -64,6 +64,59 @@ namespace Tests
 			// Assert
 			Assert::AreEqual(expected, actual);
 		}
+		/*Testing the Compile method of Compiler
+		One loop given
+		Returns list of one command*/
+		TEST_METHOD(Compile_TryCompileLoop_ReturnsOneCommand) {
+			// Arrange
+			Compiler cmp("[>>++.]");
+			int expected = 1;
+			// Act
+			std::shared_ptr<std::list<std::shared_ptr<ICommand>>> list = cmp.Compile();
+			int actual = list->size();
+			// Assert
+			Assert::AreEqual(expected, actual);
+		}
+		/*Testing the Compile method of Compiler
+		One loop given
+		Returns command type LoopCommand*/
+		TEST_METHOD(Compile_TryCompileLoop_ReturnsOneCommandClassLoop) {
+			// Arrange
+			Compiler cmp("[>>++.]");
+			std::string expected = "class LoopCommand";
+			// Act
+			std::shared_ptr<std::list<std::shared_ptr<ICommand>>> list = cmp.Compile();
+			std::string actual = typeid(**(list->begin())).name();
+			// Assert
+			Assert::AreEqual(expected, actual);
+		}
+		TEST_METHOD(Compile_TryCompileDifferentCommands_ReturnsRightCommands) {
+			// Arrange
+			Compiler cmp("+-><.");
+			std::string expected_first_command_name = "class IncrementValueCommand";
+			std::string expected_second_command_name = "class DecrementValueCommand";
+			std::string expected_third_command_name = "class StepForwardCommand";
+			std::string expected_fourth_command_name = "class StepBackwardCommand";
+			std::string expected_fifth_command_name = "class PrintValueCommand";
+			// Act
+			std::shared_ptr<std::list<std::shared_ptr<ICommand>>> list = cmp.Compile();
+			auto it = list->begin();
+			std::string actual_first_command_name = typeid(**it).name();
+			it++;
+			std::string actual_second_command_name = typeid(**it).name();
+			it++;
+			std::string actual_third_command_name = typeid(**it).name();
+			it++;
+			std::string actual_fourth_command_name = typeid(**it).name();
+			it++;
+			std::string actual_fifth_command_name = typeid(**it).name();
+			// Assert
+			Assert::IsTrue(expected_first_command_name == actual_first_command_name);
+			Assert::IsTrue(expected_second_command_name == actual_second_command_name);
+			Assert::IsTrue(expected_third_command_name == actual_third_command_name);
+			Assert::IsTrue(expected_fourth_command_name == actual_fourth_command_name);
+			Assert::IsTrue(expected_fifth_command_name == actual_fifth_command_name);
+		}
 	};
 	// Testing for commands
 	TEST_CLASS(CommandsUnitTests) {

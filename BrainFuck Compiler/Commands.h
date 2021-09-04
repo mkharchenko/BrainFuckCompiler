@@ -45,6 +45,7 @@ public:
     virtual CommandOutput Execute(std::shared_ptr<BFProgramState> state);
 };
 
+// Loop command
 class LoopCommand : public ICommand {
 private:
     std::shared_ptr<std::list<std::shared_ptr<ICommand>>> commandList_;
