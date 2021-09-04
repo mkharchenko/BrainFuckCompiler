@@ -90,6 +90,9 @@ namespace Tests
 			// Assert
 			Assert::AreEqual(expected, actual);
 		}
+		/*Testing the Compile method of Compiler
+		* Five different commands given
+		Returns list of right comments*/
 		TEST_METHOD(Compile_TryCompileDifferentCommands_ReturnsRightCommands) {
 			// Arrange
 			Compiler cmp("+-><.");
