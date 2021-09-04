@@ -1,10 +1,10 @@
 #include "BFProgramState.h"
 
 BFProgramState::BFProgramState() {
-	currentData = 0;
-	memset(data, 0, sizeof(data));
+	data.push_back(0);
+	currentData = data.begin();
 }
 
 char BFProgramState::GetPointerValue() {
-	return data[currentData];
+	return *currentData;
 }

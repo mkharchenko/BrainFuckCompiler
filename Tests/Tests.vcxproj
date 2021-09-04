@@ -77,19 +77,19 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\kharc\source\repos\BrainFuck Compiler\BrainFuck Compiler;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\kharc\Desktop\TestProject_BrainFuckCompiler\BrainFuck Compiler;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\kharc\source\repos\BrainFuck Compiler\BrainFuck Compiler;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\kharc\Desktop\TestProject_BrainFuckCompiler\BrainFuck Compiler;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Users\kharc\source\repos\BrainFuck Compiler\BrainFuck Compiler;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\kharc\Desktop\TestProject_BrainFuckCompiler\BrainFuck Compiler;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Users\kharc\source\repos\BrainFuck Compiler\BrainFuck Compiler;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\kharc\Desktop\TestProject_BrainFuckCompiler\BrainFuck Compiler;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -103,7 +103,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalLibraryDirectories>C:\Users\kharc\source\repos\BrainFuck Compiler\BrainFuck Compiler\Debug;$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\kharc\Desktop\TestProject_BrainFuckCompiler\BrainFuck Compiler\Debug;$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>Compiler.obj;BrainFuck Compiler.obj;Commands.obj;Invoker.obj;BFProgramState.obj;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -119,7 +119,7 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalLibraryDirectories>C:\Users\kharc\source\repos\BrainFuck Compiler\BrainFuck Compiler\Debug;$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\kharc\Desktop\TestProject_BrainFuckCompiler\BrainFuck Compiler\Debug;$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>Compiler.obj;BrainFuck Compiler.obj;Commands.obj;Invoker.obj;BFProgramState.obj;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -139,7 +139,7 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>C:\Users\kharc\source\repos\BrainFuck Compiler\BrainFuck Compiler\Debug;$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\kharc\Desktop\TestProject_BrainFuckCompiler\BrainFuck Compiler\Debug;$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>Compiler.obj;BrainFuck Compiler.obj;Commands.obj;Invoker.obj;BFProgramState.obj;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -159,7 +159,7 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>C:\Users\kharc\source\repos\BrainFuck Compiler\BrainFuck Compiler\Debug;$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\kharc\Desktop\TestProject_BrainFuckCompiler\BrainFuck Compiler\Debug;$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>Compiler.obj;BrainFuck Compiler.obj;Commands.obj;Invoker.obj;BFProgramState.obj;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

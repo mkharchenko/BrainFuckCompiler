@@ -10,13 +10,13 @@ LoopStartCommand::LoopStartCommand(int loopsize) : LoopCommandBase(loopsize) {}
 
 // DecrementValueCommand
 CommandOutput DecrementValueCommand::Execute(BFProgramState& state) {
-    state.data[state.currentData]--;
+    (*state.currentData)--;
     return CommandOutput();
 }
 
 // IncrementValueCommand
 CommandOutput IncrementValueCommand::Execute(BFProgramState& state) {
-    state.data[state.currentData]++;
+    (*state.currentData)++;
     return CommandOutput();
 }
 
@@ -42,12 +42,12 @@ CommandOutput LoopStartCommand::Execute(BFProgramState& state) {
 
 // PrintValueCommand
 CommandOutput PrintValueCommand::Execute(BFProgramState& state) {
-    return CommandOutput(1, true, state.data[state.currentData]);
+    return CommandOutput(1, true, state.GetPointerValue());
 }
 
 // StepBackwardCommand
 CommandOutput StepBackwardCommand::Execute(BFProgramState& state) {
-    if (state.currentData == 0) {
+    if (state.currentData == state.data.begin()) {
         throw std::runtime_error("Runtime error. Selected cell number less than 0.");
     }
     state.currentData--;
@@ -56,10 +56,10 @@ CommandOutput StepBackwardCommand::Execute(BFProgramState& state) {
 
 // StepForwardCommand
 CommandOutput StepForwardCommand::Execute(BFProgramState& state) {
-    state.currentData++;
-    if (state.currentData >= BF_DATA_SIZE) {
-        throw std::runtime_error("Runtime error. Selected cell number exceeded 30000.");
+    if (state.currentData == --(state.data.end())) {
+        state.data.push_back(0);
     }
+    state.currentData++;
     return CommandOutput();
 }
 

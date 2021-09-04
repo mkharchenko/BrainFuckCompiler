@@ -6,6 +6,7 @@
 #include "../BrainFuck Compiler/Compiler.h"
 #include "../BrainFuck Compiler/Invoker.h"
 #include "../BrainFuck Compiler/CommandOutput.h"
+#include "../BrainFuck Compiler/BFProgramState.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -73,13 +74,14 @@ namespace Tests
 			// Arrange
 			std::unique_ptr<BFProgramState> bfc(new BFProgramState);
 			StepForwardCommand cmd;
-			bfc->currentData = 5;
-			int expected = 6;
+			bfc->data.push_back(0);
+			std::list<char>::iterator expected = bfc->currentData;
+			expected++;
 			// Act
 			cmd.Execute(*bfc);
-			int actual = bfc->currentData;
+			std::list<char>::iterator actual = bfc->currentData;
 			// Assert
-			Assert::AreEqual(expected, actual);
+			Assert::IsTrue(expected == actual);
 		}
 		/*Testing Execute method of StepBackwardCommand
 		Decrements currentData in BFProgramState*/
@@ -87,13 +89,14 @@ namespace Tests
 			// Arrange
 			std::unique_ptr<BFProgramState> bfc(new BFProgramState);
 			StepBackwardCommand cmd;
-			bfc->currentData = 5;
-			int expected = 4;
+			StepForwardCommand cmd2;
+			cmd2.Execute(*bfc);
+			std::list<char>::iterator expected = bfc->data.begin();
 			// Act
 			cmd.Execute(*bfc);
-			int actual = bfc->currentData;
+			std::list<char>::iterator actual = bfc->currentData;
 			// Assert
-			Assert::AreEqual(expected, actual);
+			Assert::IsTrue(expected == actual);
 		}
 		/*Testing Execute method of IncrementValueCommand
 		Increments current value of BFProgramState*/
@@ -101,7 +104,7 @@ namespace Tests
 			// Arrange
 			std::unique_ptr<BFProgramState> bfc(new BFProgramState);
 			IncrementValueCommand cmd;
-			bfc->data[bfc->currentData] = 10;
+			(*bfc->currentData) = 10;
 			int expected = 11;
 			// Act
 			cmd.Execute(*bfc);
@@ -115,7 +118,7 @@ namespace Tests
 			// Arrange
 			std::unique_ptr<BFProgramState> bfc(new BFProgramState);
 			DecrementValueCommand cmd;
-			bfc->data[bfc->currentData] = 10;
+			(*bfc->currentData) = 10;
 			int expected = 9;
 			// Act
 			cmd.Execute(*bfc);
@@ -129,7 +132,7 @@ namespace Tests
 			// Arrange
 			std::unique_ptr<BFProgramState> bfc(new BFProgramState);
 			PrintValueCommand cmd;
-			bfc->data[bfc->currentData] = 40;
+			(*bfc->currentData) = 40;
 			char expected = 40;
 			// Act
 			CommandOutput co = cmd.Execute(*bfc);
@@ -157,7 +160,7 @@ namespace Tests
 		TEST_METHOD(LoopEndCommandExecute_GiveNotEmptyProgramState_ReturnsCommandOutPutWithStepEqualsNegativeLoopSize) {
 			// Arrange
 			std::unique_ptr<BFProgramState> bfc(new BFProgramState);
-			bfc->data[bfc->currentData] = 20;
+			(*bfc->currentData) = 20;
 			const int loopsize = 15;
 			LoopEndCommand cmd(loopsize);
 			int expected = loopsize * -1;
@@ -174,19 +177,6 @@ namespace Tests
 			// Arrange
 			std::unique_ptr<BFProgramState> bfc(new BFProgramState);
 			StepBackwardCommand cmd;
-			// Act
-			auto func = [&] { cmd.Execute(*bfc); };
-			// Assert
-			Assert::ExpectException<std::runtime_error>(func);
-		}
-		/*Testing Execute method of StepForwardCommand
-		Giving programstate with maximum currentData
-		Throws runtime_error*/
-		TEST_METHOD(StepForwardCommandExecute_GiveProgramStateWithMaxCurrentData_ThrowsRuntimeError) {
-			// Arrange
-			std::unique_ptr<BFProgramState> bfc(new BFProgramState);
-			bfc->currentData = BF_DATA_SIZE - 1;
-			StepForwardCommand cmd;
 			// Act
 			auto func = [&] { cmd.Execute(*bfc); };
 			// Assert
