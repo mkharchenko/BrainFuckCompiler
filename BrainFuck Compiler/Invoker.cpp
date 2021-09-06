@@ -16,8 +16,8 @@ void Invoker::Init() {
 std::string Invoker::RunProgram() {
 	std::string result = "";
 	for (auto it = (*commandList_).begin(); it != (*commandList_).end(); it++) {
-		CommandOutput co = (*it)->Execute(programstate_);
-		result += co.returned_result;
+		std::string command_out = (*it)->Execute(programstate_);
+		result += command_out;
 	}
 	return result;
 }

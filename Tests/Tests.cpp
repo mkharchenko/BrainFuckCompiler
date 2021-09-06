@@ -5,7 +5,6 @@
 #include <memory>
 #include "../BrainFuck Compiler/Compiler.h"
 #include "../BrainFuck Compiler/Invoker.h"
-#include "../BrainFuck Compiler/CommandOutput.h"
 #include "../BrainFuck Compiler/BFProgramState.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
@@ -191,8 +190,8 @@ namespace Tests
 			(*bfc->currentData) = '!';
 			std::string expected = "!";
 			// Act
-			CommandOutput co = cmd.Execute(bfc);
-			std::string actual = co.returned_result;
+			std::string command_out = cmd.Execute(bfc);
+			std::string actual = command_out;
 			// Assert
 			Assert::AreEqual(expected, actual);
 		}

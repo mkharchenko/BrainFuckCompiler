@@ -4,7 +4,6 @@
 #include <list>
 #include <string>
 #include "Commands.h"
-#include "CommandOutput.h"
 
 class ICompilerState;
 class ICommand;

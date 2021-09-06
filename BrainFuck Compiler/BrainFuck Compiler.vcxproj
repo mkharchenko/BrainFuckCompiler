@@ -147,7 +147,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BFProgramState.h" />
-    <ClInclude Include="CommandOutput.h" />
     <ClInclude Include="Commands.h" />
     <ClInclude Include="Compiler.h" />
     <ClInclude Include="Invoker.h" />

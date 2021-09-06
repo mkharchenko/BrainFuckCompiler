@@ -44,9 +44,6 @@
     <ClInclude Include="Compiler.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="CommandOutput.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="BFProgramState.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
